@@ -3,7 +3,8 @@
 	"version": "1.0.0",
 	"type": "lib",
 	"license": "GPL-3.0-or-later",
-    "homepage": "https://xshgzs.com/?from=composer",
+	"homepage": "https://xshgzs.com/?from=composer",
+	"minimum-stability": "stable",
 	"require": {
 		"php": ">=5.6",
 		"lcobucci/jwt": "^3.3"
