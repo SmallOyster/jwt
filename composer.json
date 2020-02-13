@@ -2,7 +2,7 @@
 	"name": "smalloyster/jwt",
 	"version": "1.0.0",
 	"type": "lib",
-	"license": "GNU General Public License v3.0",
+	"license": "GPL-3.0-or-later",
     "homepage": "https://xshgzs.com/?from=composer",
 	"require": {
 		"php": ">=5.6",
