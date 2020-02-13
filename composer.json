@@ -1,0 +1,26 @@
+{
+	"name": "smalloyster/jwt",
+	"version": "1.0.0",
+	"type": "lib",
+	"license": "GNU General Public License v3.0",
+    "homepage": "https://xshgzs.com/?from=composer",
+	"require": {
+		"php": ">=5.6",
+		"lcobucci/jwt": "^3.3"
+	},
+	"keywords": [
+		"jwt",
+		"smalloyster"
+	],
+	"authors": [
+		{
+			"name": "Jerry Cheung",
+			"email": "master@xshgzs.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"smalloyster\\": "src/"
+		}
+	}
+}
