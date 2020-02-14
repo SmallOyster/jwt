@@ -1,10 +1,10 @@
 {
 	"name": "smalloyster/jwt",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"type": "lib",
 	"license": "GPL-3.0",
 	"homepage": "https://xshgzs.com/?from=composer",
-	"minimum-stability": "stable",
+	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.6",
 		"lcobucci/jwt": "^3.3"
