@@ -19,12 +19,12 @@ use smalloyster\Jwt;
 ```
 $token = Jwt::getInstance()
 	->setKey("your-jwt-key")
-	->setIss(sha1(getIP())) // 自定义，请自行定义获取IP的方法
-	->setExpire(7200);
+	->setIss("") // 自定义，签发者
+	->setAud(""); // 自定义，接收者
 
 // 可自定义payload的参数，定义data为一维数组即可
 foreach ($data as $key => $value){
-	$token = $token->setClaim($key,$value);
+	$token = $token->setClaim($key, $value);
 }
 
 return (string)$token->encode();
@@ -32,12 +32,16 @@ return (string)$token->encode();
 
 :four: 验证JWT的签名有效性及使用者
 ```
+$token = '';
+
 return Jwt::getInstance()
-	->setIss(sha1(getIP()))
+	->setKey("your-jwt-key")
+	->setIss("") // 自定义，签发者
+	->setAud("") // 自定义，接收者
 	->setToken($token)
 	->verify();
 
 上述将会返回一个数组：
-JWT有效：["result"=>true,"data"=>payload中的数据]
-JWT无效：["result"=>false]
+JWT有效：["result" => true, "data" => payload中的数据]
+JWT无效：["result" => false]
 ```
