@@ -1,11 +1,13 @@
 <?php
+
 /**
  * @name PHP-JWT-helper
  * @package smalloyster
  * @author Jerry Cheung <master@xshgzs.com>
  * @since 2020-02-13
- * @version 1.1.0 2020-02-14
+ * @version 1.2.0 2020-09-16
  */
+
 namespace smalloyster;
 
 use Lcobucci\JWT\Builder;
@@ -14,7 +16,8 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\ValidationData;
 
-class Jwt{
+class Jwt
+{
 	/**
 	 * token令牌
 	 * @var string
@@ -50,7 +53,7 @@ class Jwt{
 	 * @var
 	 */
 	private $key = '';
-	
+
 	/**
 	 * 解析器
 	 * @var
@@ -63,15 +66,20 @@ class Jwt{
 	 */
 	private static $_instance;
 
-	private function __construct() {}
-	private function __clone() {}
+	private function __construct()
+	{
+	}
+	private function __clone()
+	{
+	}
 
 
 	/**
 	 * 获取实例
 	 * @return Token
 	 */
-	public static function getInstance() {
+	public static function getInstance()
+	{
 		if (!self::$_instance) {
 			self::$_instance = new self();
 		}
@@ -83,7 +91,8 @@ class Jwt{
 	 * genToken 设置 token
 	 * @return string
 	 */
-	public function genToken() {
+	public function genToken()
+	{
 		return (string)$this->token;
 	}
 
@@ -93,7 +102,8 @@ class Jwt{
 	 * @param string $iss
 	 * @return $this
 	 */
-	public function setIss($iss = '') {
+	public function setIss($iss = '')
+	{
 		$this->iss = $iss;
 		return $this;
 	}
@@ -104,7 +114,8 @@ class Jwt{
 	 * @param string $aud
 	 * @return $this
 	 */
-	public function setAud($aud = '') {
+	public function setAud($aud = '')
+	{
 		$this->aud = $aud;
 		return $this;
 	}
@@ -116,7 +127,8 @@ class Jwt{
 	 * @param string $value 值
 	 * @return $this
 	 */
-	public function setClaim($name = '',$value = '') {
+	public function setClaim($name = '', $value = '')
+	{
 		$this->claims[$name] = $value;
 		return $this;
 	}
@@ -127,7 +139,8 @@ class Jwt{
 	 * @param int $expire
 	 * @return $this
 	 */
-	public function setExpire($expire = 0) {
+	public function setExpire($expire = 0)
+	{
 		$this->expire = $expire;
 		return $this;
 	}
@@ -138,7 +151,8 @@ class Jwt{
 	 * @param string $key
 	 * @return $this
 	 */
-	public function setKey($key = '') {
+	public function setKey($key = '')
+	{
 		$this->key = $key;
 		return $this;
 	}
@@ -149,7 +163,8 @@ class Jwt{
 	 * @param string $token
 	 * @return $this
 	 */
-	public function setToken($token = '') {
+	public function setToken($token = '')
+	{
 		$this->token = $token;
 		return $this;
 	}
@@ -159,21 +174,20 @@ class Jwt{
 	 * encode 生成token
 	 * @return string JWT-Token值
 	 */
-	public function encode() {
+	public function encode()
+	{
 		$time = time();
 
 		$this->token = (new Builder())
 			->issuedBy($this->iss) // 配置发行人（ISS权利要求）
-			->issuedAt($time) // token创建时间
-			->expiresAt($time + $this->expire) // 设置过期时间
-			->identifiedBy(sha1($this->iss)); // 当前token设置的标识
-		
+			->expiresAt($time + $this->expire); // 设置过期时间
+
 		// 设置接收人
-		if($this->aud != '') $this->token->permittedFor($this->aud);
+		if ($this->aud != '') $this->token->permittedFor($this->aud);
 
 		// 设置自定义参数(payload)
 		foreach ($this->claims as $name => $value) {
-			$this->token->withClaim($name,$value);
+			$this->token->withClaim($name, $value);
 		}
 
 		return $this->token->getToken(new Sha256(), new Key($this->key));
@@ -184,7 +198,8 @@ class Jwt{
 	 * jwt decode token
 	 * @return bool
 	 */
-	public function decode() {
+	public function decode()
+	{
 		if (!$this->parser) {
 			$this->parser = (new Parser())->parse((string)$this->token);
 		}
@@ -197,13 +212,13 @@ class Jwt{
 	 * verify 验证有效性(签名、有效期、ISS/AUD/JTI)
 	 * @return array
 	 */
-	public function verify() {
-		$verifySign = $this->decode()->verify(new Sha256(),$this->key);
+	public function verify()
+	{
+		$verifySign = $this->decode()->verify(new Sha256(), $this->key);
 
 		$data = new ValidationData();
 		$data->setIssuer($this->iss);
 		$data->setAudience($this->aud);
-		$data->setId(sha1($this->iss));
 
 		// 校验不通过，结束
 		if ($this->parser->validate($data) != true || $verifySign != true) {
@@ -216,10 +231,10 @@ class Jwt{
 		$claimsObj = $this->decode()->getClaims();
 		$claims = [];
 
-		foreach($claimsObj as $name => $valueObj) {
+		foreach ($claimsObj as $name => $valueObj) {
 			$claims[$name] = $valueObj->getValue();
 		}
-		
+
 		return array(
 			'result' => true,
 			'data' => $claims
