@@ -18,9 +18,9 @@ use smalloyster\Jwt;
 :three: 复制以下代码，生成JWT-Token
 ```
 $token = Jwt::getInstance()
-	->setKey("your-jwt-key")
-	->setIss("") // 自定义，签发者
-	->setAud("") // 自定义，接收者
+	->setKey('your-jwt-key')
+	->setIss('') // 自定义，签发者
+	->setAud('') // 自定义，接收者
 	->setExpire(7200) // 自定义，有效秒数
 	->setAlgorithmId('HS256'); // 自定义，签名加密算法（目前支持HS256/HS384/HS512）
 
@@ -34,16 +34,18 @@ return $token->generate();
 
 :four: 验证JWT的签名有效性及使用者
 ```
-$token = '';
-
 return Jwt::getInstance()
-	->setKey("your-jwt-key")
-	->setIss("") // 自定义，签发者
-	->setAud("") // 自定义，接收者
-	->setToken($token)
+	->setKey('your-jwt-key')
+	->setIss('') // 自定义，签发者
+	->setAud('') // 自定义，接收者
+	->setAlgorithmId('HS256') // 自定义，签名加密算法（目前支持HS256/HS384/HS512）
+	->setToken('..')
 	->verify();
-
-上述将会返回一个数组：
-JWT有效：["result" => true, "data" => payload中的数据]
-JWT无效：["result" => false, "errorMsg" => 验证错误的信息]
 ```
+**上述将会返回一个数组：**
+
+1. JWT有效：["result" => true, "data" => payload中的数据]
+
+2. JWT无效：["result" => false, "errorMsg" => 验证错误的信息]
+
+> 当token格式错误时，还会抛出错误，请catch ‼

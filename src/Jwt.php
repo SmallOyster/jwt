@@ -5,7 +5,7 @@
  * @package smalloyster
  * @author Oyster Cheung <master@xshgzs.com>
  * @since 2020-02-13
- * @version 2.0.0 2022-05-03
+ * @version 2.0.1 2022-05-03
  */
 
 namespace smalloyster;
@@ -113,7 +113,7 @@ class Jwt
 	 * @param string $value 值
 	 * @return $this
 	 */
-	public function setClaim(string $name = '', string $value = '')
+	public function setClaim(string $name = '', $value)
 	{
 		$this->claims[$name] = $value;
 		return $this;
@@ -202,11 +202,9 @@ class Jwt
 		$config = Configuration::forSymmetricSigner($this->getSigner(), InMemory::plainText($this->key));
 
 		$this->builder = $config->builder()
-			->issuedBy($this->iss) // 设置ISS
-			->expiresAt($time->modify('+' . $this->expire . ' seconds')->setTimezone(new DateTimeZone('Asia/Shanghai'))); // 设置EXP
-
-		// 设置接收人
-		if ($this->aud != '') $this->builder->permittedFor($this->aud);
+			->issuedBy($this->iss) // 设置签发者
+			->expiresAt($time->modify('+' . $this->expire . ' seconds')->setTimezone(new DateTimeZone('Asia/Shanghai'))) // 设置超时时间
+			->permittedFor($this->aud); // 设置接收人
 
 		// 设置自定义参数(payload)
 		foreach ($this->claims as $name => $value) {
